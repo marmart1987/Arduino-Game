@@ -49,7 +49,13 @@ void setup() {
   lcd.noCursor();
   Serial.begin(115200);
   lcd.begin(16, 2);
-  randomSeed(analogRead(1) + analogRead(2) + analogRead(3) + analogRead(4) + analogRead(5));
+  int seedBuffer;
+  long sTime = millis();
+  while(millis()-sTime <= 50){
+    sTime += analogRead(1) + analogRead(2) + analogRead(3) + analogRead(4) + analogRead(5);
+  }
+
+  randomSeed(sTime);
   lcd.createChar(2, coin);
   lcd.createChar(1, wall);
   lcd.createChar(0, player);
