@@ -94,10 +94,10 @@ bool gameOver() {
 }
 void checkInput() {
   lcd.home();
-  if (analogRead(Y_pin) < 550) {
+  if (analogRead(Y_pin) < 450) {
     playerPos = false;
   } else {
-    if (analogRead(Y_pin) > 690) {
+    if (analogRead(Y_pin) > 790) {
       playerPos = true;
     }
   }
@@ -108,6 +108,8 @@ void reward(){
   tone(BUZZER, NOTE_C5,250);
 }
 void loop() {
+  lcd.noBlink();
+  lcd.noCursor();
   if (speed > 50) {
     speed = floor(350 - (pow(log((millis() / 1000) + 1), 3.50969)));
   }
@@ -123,10 +125,10 @@ void loop() {
   drawRow(bottomRow, false);
   checkInput();
   slot = !slot;
-  score += 30;
+  score += 80;
   long t1 = millis() + 1;
   tone(BUZZER,(millis()/50)%1200,10);
-  while ((millis() + 1 - t1) < speed) {
+  do{
     checkInput();
     if (int(floor((millis() / 5))) % 5 == 1) {
       if (playerPos == false) {
@@ -156,7 +158,7 @@ void loop() {
         lcd.print(" ");
       }
     }
-  }
+  } while ((millis() + 1 - t1) < speed);
 
   Serial.print(" Speed: ");
   Serial.print(speed);
